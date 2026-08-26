@@ -188,6 +188,17 @@ def build_medgemma_extractor(model_id: str = DEFAULT_MODEL,
     return build_extractor_from_generate(load_medgemma(model_id, **kwargs))
 
 
+def build_hf_text_extractor(model_id: str, **kwargs) -> Callable[[str], Dict[str, bool]]:
+    """Build an extractor from any instruction-tuned Hugging Face text model.
+
+    ``load_medgemma`` already falls back to ``text-generation`` when a checkpoint
+    is not multimodal.  Exposing that tested path under a model-neutral name lets
+    the benchmark include compact, ungated comparison models without duplicating
+    prompt, parsing, or schema-adapter code.
+    """
+    return build_extractor_from_generate(load_medgemma(model_id, **kwargs))
+
+
 # --------------------------------------------------------------------------- #
 # Deterministic scripted stand-in (NO model) for end-to-end harness validation.
 # It emits schema JSON exactly as a well-behaved LLM would, so the parse ->

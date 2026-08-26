@@ -38,6 +38,13 @@ from run_extraction_eval import evaluate_one          # field-level metrics
 from run_redflag_eval import end_to_end_eval          # end-to-end red-flag metrics
 
 
+MODEL_REGISTRY = {
+    "medgemma": "google/medgemma-4b-it",
+    "qwen": "Qwen/Qwen2.5-0.5B-Instruct",
+    "smollm": "HuggingFaceTB/SmolLM2-360M-Instruct",
+}
+
+
 def _resolve_extractors(names, model_id, hf_token, include_scripted):
     """Return {display_name: callable}, skipping unavailable ones with a reason.
 
@@ -55,18 +62,19 @@ def _resolve_extractors(names, model_id, hf_token, include_scripted):
                 continue
             from llm_medgemma import scripted_extractor
             resolved[name] = scripted_extractor()
-        elif name == "medgemma":
+        elif name in MODEL_REGISTRY:
+            selected_model = model_id if name == "medgemma" else MODEL_REGISTRY[name]
             try:
-                from llm_medgemma import build_medgemma_extractor
-                resolved[name] = build_medgemma_extractor(model_id, hf_token=hf_token)
+                from llm_medgemma import build_hf_text_extractor
+                resolved[name] = build_hf_text_extractor(selected_model, hf_token=hf_token)
             except ImportError:
                 skipped[name] = (
                     "transformers/torch not installed in this environment; "
                     "`pip install -r code/requirements.txt` and re-run to load "
-                    f"{model_id}")
+                    f"{selected_model}")
             except Exception as exc:  # OSError: gated download / offline / no weights
                 skipped[name] = (
-                    f"model weights for {model_id} not accessible in this "
+                    f"model weights for {selected_model} not accessible in this "
                     "environment (gated download, offline, or no GPU); run this "
                     f"command where the model is available -- {type(exc).__name__}")
         else:
@@ -94,7 +102,8 @@ def evaluate_extractor(name, fn):
 
 
 _LABEL = {"rule_v1": "Rule-based v1", "rule_v2": "Rule-based v2 (improved)",
-          "medgemma": "MedGemma (open LLM)", "scripted": "Scripted stand-in"}
+          "medgemma": "MedGemma-4B", "qwen": "Qwen2.5-0.5B",
+          "smollm": "SmolLM2-360M", "scripted": "Scripted stand-in"}
 
 
 def _num(x):
@@ -143,7 +152,7 @@ def to_latex(res):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--extractor", default="rule_v1,rule_v2",
-                    help="comma-separated: rule_v1,rule_v2,medgemma,scripted")
+                    help="comma-separated: rule_v1,rule_v2,medgemma,qwen,smollm,scripted")
     ap.add_argument("--model", default="google/medgemma-4b-it")
     ap.add_argument("--hf-token", default=None)
     ap.add_argument("--include-scripted", action="store_true",
@@ -164,6 +173,7 @@ def main():
         extractors_out[name] = {"status": "skipped", "reason": reason}
 
     res = {"n_docs": len(TEXT_CASES), "model": args.model,
+           "model_registry": MODEL_REGISTRY,
            "extractors": extractors_out}
 
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
