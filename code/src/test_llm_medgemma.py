@@ -23,6 +23,7 @@ from llm_medgemma import (
 )
 from redflag_benchmark import FEATURE_KEYS, TEXT_CASES, schema_to_features
 from safety import evaluate_red_flags
+from run_llm_eval import benchmark_fingerprint, evaluate_extractor
 
 
 def test_robust_parse_handles_fences_and_prose():
@@ -101,6 +102,17 @@ def test_extractor_runs_over_whole_benchmark():
         feats = extract(case.note)
         assert set(feats) == set(FEATURE_KEYS)
         assert all(isinstance(v, bool) for v in feats.values())
+
+
+def test_unified_evaluation_retains_case_level_audit_trail():
+    result = evaluate_extractor("scripted", scripted_extractor())
+    audit = result["case_level"]
+    assert len(audit) == len(TEXT_CASES)
+    assert audit[0]["case_id"] == "T001"
+    assert set(audit[0]) == {"case_id", "category", "gold_urgent",
+                             "predicted_urgent", "gold_features",
+                             "predicted_features"}
+    assert len(benchmark_fingerprint()) == 64
 
 
 def _run_all():

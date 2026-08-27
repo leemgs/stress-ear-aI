@@ -54,7 +54,7 @@ rule-based extractors and an executed MedGemma-4B comparison.
 | **AI-2** | Fairness across subgroups (first-class results) | ✅ | Per-category red-flag recall reported as a primary result; `../tables/table_redflag_bycat.tex` |
 | **AI-3** | Transportability / external validation across settings | ◑ **[Prospective]** | Real-note and multilingual robustness remain to be tested; `../main.tex` §"Limitations" |
 | **AI-4** | Human oversight / role in clinical pathway | ✅ | Non-overridable deterministic red-flag layer + clinician-verified extraction; `../main.tex` §"System architecture", §"Governance", §"Discussion" |
-| **AI-5** | Reproducibility (seeds, versions, determinism) | ✅ | Run-to-run consistency 1.00; deterministic rules/extractors; open harness; `../main.tex` §"Results", §"Declarations" |
+| **AI-5** | Reproducibility (seeds, versions, determinism) | ✅ | Run-to-run consistency 1.00; benchmark SHA-256 fingerprint; case-level decision audit trail; open harness; `../main.tex` §"Results", §"Declarations" |
 | **AI-6** | Open medical LLM use constrained + verified | ✅ | Executed MedGemma-4B evaluation with zero-shot schema prompting, deterministic decoding, a shared adapter, and clinician verification; `../main.tex` §"System architecture", §"Three-system extractor comparison" |
 | — | Risk-stratification prediction models (tinnitus / hearing loss; AUROC/AUPRC, calibration, decision-curve) | **[Prospective]** | Not reported in either paper; prospective component of the STARS program |
 

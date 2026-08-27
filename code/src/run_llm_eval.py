@@ -29,6 +29,7 @@ Run (rule-based references always work; MedGemma needs model access + GPU):
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -36,6 +37,7 @@ from pathlib import Path
 from redflag_benchmark import TEXT_CASES, EXTRACTORS
 from run_extraction_eval import evaluate_one          # field-level metrics
 from run_redflag_eval import end_to_end_eval          # end-to-end red-flag metrics
+from safety import evaluate_red_flags
 
 
 MODEL_REGISTRY = {
@@ -83,9 +85,20 @@ def _resolve_extractors(names, model_id, hf_token, include_scripted):
 
 
 def evaluate_extractor(name, fn):
-    """Field-level + end-to-end metrics for one extractor on the text benchmark."""
-    field = evaluate_one(fn)
-    e2e = end_to_end_eval(fn)
+    """Score one frozen pass and retain a case-level decision audit trail."""
+    predictions = [fn(case.note) for case in TEXT_CASES]
+    field = evaluate_one(predictions=predictions)
+    e2e = end_to_end_eval(predictions=predictions)
+    case_level = []
+    for index, (case, pred) in enumerate(zip(TEXT_CASES, predictions), start=1):
+        case_level.append({
+            "case_id": f"T{index:03d}",
+            "category": case.category,
+            "gold_urgent": case.gold_urgent,
+            "predicted_urgent": evaluate_red_flags(pred).urgent,
+            "gold_features": case.gold_features,
+            "predicted_features": pred,
+        })
     return {
         "status": "ok",
         "field_level": field,
@@ -98,7 +111,17 @@ def evaluate_extractor(name, fn):
                                 "specificity": v["specificity"]}
                             for c, v in e2e["by_category"].items()},
         },
+        "case_level": case_level,
     }
+
+
+def benchmark_fingerprint():
+    """SHA-256 over ordered notes, labels, and gold features for provenance."""
+    payload = [{"note": c.note, "gold_urgent": c.gold_urgent,
+                "gold_features": c.gold_features, "category": c.category}
+               for c in TEXT_CASES]
+    canonical = json.dumps(payload, sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode("utf-8")).hexdigest()
 
 
 _LABEL = {"rule_v1": "Rule-based v1", "rule_v2": "Rule-based v2 (improved)",
@@ -172,7 +195,8 @@ def main():
     for name, reason in skipped.items():
         extractors_out[name] = {"status": "skipped", "reason": reason}
 
-    res = {"n_docs": len(TEXT_CASES), "model": args.model,
+    res = {"n_docs": len(TEXT_CASES), "benchmark_sha256": benchmark_fingerprint(),
+           "model": args.model,
            "model_registry": MODEL_REGISTRY,
            "extractors": extractors_out}
 

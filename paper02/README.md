@@ -79,6 +79,11 @@ No local GPU? Open the turnkey **free-GPU notebook**
 [`code/notebooks/medgemma_eval_colab.ipynb`](../code/notebooks/medgemma_eval_colab.ipynb)
 (Colab/Kaggle free-tier T4 is enough for the 4B model).
 
+Every new unified-harness run records a SHA-256 fingerprint of the ordered
+benchmark and a case-level audit trail containing gold/predicted features and
+urgency decisions. This makes aggregate metrics traceable to individual cases
+and reveals accidental benchmark drift.
+
 Benchmark and code: `code/src/redflag_benchmark.py`, `safety.py`,
 `llm_extract.py`, `llm_medgemma.py`, `run_redflag_eval.py`,
 `run_extraction_eval.py`, `run_llm_eval.py`.

@@ -58,9 +58,18 @@ def _feature_metrics(gold, pred):
     return out, macro
 
 
-def evaluate_one(extractor):
+def evaluate_one(extractor=None, predictions=None):
+    """Score one extractor, or a precomputed prediction list.
+
+    Accepting predictions prevents expensive LLMs from being called again by
+    each metric layer and ensures every reported metric refers to the same
+    frozen model outputs.
+    """
     gold = [c.gold_features for c in TEXT_CASES]
-    pred = [extractor(c.note) for c in TEXT_CASES]
+    pred = (predictions if predictions is not None
+            else [extractor(c.note) for c in TEXT_CASES])
+    if len(pred) != len(TEXT_CASES):
+        raise ValueError("prediction count must match TEXT_CASES")
     per_feat, macro = _feature_metrics(gold, pred)
     flips = 0
     for c, p in zip(TEXT_CASES, pred):

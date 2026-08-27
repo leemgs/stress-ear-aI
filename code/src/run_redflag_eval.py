@@ -77,14 +77,19 @@ def structured_eval():
     return res
 
 
-def end_to_end_eval(extractor):
-    pairs = [(c.gold_urgent, evaluate_red_flags(extractor(c.note)).urgent)
-             for c in TEXT_CASES]
+def end_to_end_eval(extractor=None, predictions=None):
+    """Evaluate decisions from an extractor or one frozen prediction list."""
+    pred = (predictions if predictions is not None
+            else [extractor(c.note) for c in TEXT_CASES])
+    if len(pred) != len(TEXT_CASES):
+        raise ValueError("prediction count must match TEXT_CASES")
+    pairs = [(c.gold_urgent, evaluate_red_flags(p).urgent)
+             for c, p in zip(TEXT_CASES, pred)]
     res = _metrics(*_confusion(pairs))
     res["by_category"] = {}
     for cat in sorted({c.category for c in TEXT_CASES}):
-        cp = [(c.gold_urgent, evaluate_red_flags(extractor(c.note)).urgent)
-              for c in TEXT_CASES if c.category == cat]
+        cp = [(c.gold_urgent, evaluate_red_flags(p).urgent)
+              for c, p in zip(TEXT_CASES, pred) if c.category == cat]
         res["by_category"][cat] = _metrics(*_confusion(cp))
     return res
 
