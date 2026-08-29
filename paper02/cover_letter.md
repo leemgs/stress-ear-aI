@@ -1,46 +1,57 @@
 # Cover Letter (Draft)
 
-> Draft for the SAFE-EAR submission to the *Journal of the American Medical
-> Informatics Association* (JAMIA), Oxford University Press. Optionally address
-> the letter to the handling editor by name; otherwise the generic "Dear Editor"
-> greeting is submission-ready.
+**August 29, 2026**
 
----
+To the Editor-in-Chief  
+*Journal of the American Medical Informatics Association*
 
-**August 28, 2026**
-
-To the Editor-in-Chief
-*Journal of the American Medical Informatics Association* (JAMIA)
-Oxford University Press / American Medical Informatics Association
-
-**Re: Submission of "A Deterministic, Guideline-Derived Referral-Safety Layer over Open Medical-LLM Extraction for Time-Critical Otologic Symptoms: An Open Benchmark and Reproducible Evaluation (SAFE-EAR)."**
+**Re: “A Deterministic Referral-Safety Contract for Medical-LLM Extraction of Time-Critical Otologic Symptoms: An Open Benchmark Evaluation”**
 
 Dear Editor,
 
-I am pleased to submit my manuscript, **SAFE-EAR**, for consideration in *JAMIA* as a **Research and Applications** article. It reports a patient-safety engineering contribution for LLM-assisted clinical documentation and triage, released with an open benchmark and a fully reproducible evaluation harness.
+I submit this manuscript for consideration as a Research and Applications
+article. SAFE-EAR examines a narrow safety-engineering question: how can a
+probabilistic text extractor be composed with a deterministic rule layer so that
+an extracted red flag cannot subsequently be suppressed by a reassuring model
+score?
 
-**What the manuscript is.** When a language model assists otology documentation or triage, a low model score must **never** suppress referral for a time-critical emergency such as sudden sensorineural hearing loss (SSNHL), where the treatment window is roughly two weeks. The safe design is not a better classifier but a **non-overridable floor**: a deterministic, guideline-derived red-flag layer, placed last, that overrides any probabilistic output. The paper specifies that layer and — unlike a design-only proposal — **evaluates** it, and then measures, honestly, that end-to-end safety is bounded by the *extraction* step rather than the rule layer.
+The main contribution is a contract-based decomposition. The software invariant
+(a fired rule forces the urgent path) is evaluated separately from the extraction
+assumption (the relevant feature must first be represented correctly). This
+prevents perfect execution of rule logic from being reported as complete
+end-to-end safety. In the 37 author-curated free-text cases, recall was 56%
+(10/18) for a naive rule extractor, 78% (14/18) for MedGemma-4B, and 100%
+(18/18) for an explicitly in-sample tuned rule reference. All systems used the
+same schema, adapter, final rules, and metrics.
 
-**Real results, and why they are credible.** On correctly-extracted features the deterministic layer reaches **100% rule coverage** (recall 19/19; specificity 15/15; 0% over-referral) — a guarantee achieved without a model. End-to-end, on an open 71-case benchmark (34 structured, 37 free-text; **no patient data**), red-flag recall is extraction-bound and spans three independent systems scored through one identical harness and adapter: **naive 56% → `google/medgemma-4b-it` 78%** (14/18; 95% Wilson CI 55–91%; specificity 100%; macro-F1 0.75; urgency-changing error 10.8%; run-to-run consistency 1.00) **→ tuned 100%**. Because MedGemma neither authored the benchmark nor saw its cue lists, its 78% is an **extractor-independent** measurement — evidence the benchmark is neither saturated (a capable open medical LLM still misses four of eighteen urgent cases) nor gamed (the tuned 100% reflects benchmark-specific tuning). This directly answers the circularity concern raised against author-curated benchmarks. I present the comparison as a descriptive, deliberately small-sample study with numerators, denominators, and Wilson intervals — not a model-ranking claim.
+The manuscript may interest JAMIA readers because it provides an executable
+method for localizing safety failures at the boundary between clinical language
+understanding and auditable decision logic. The benchmark, rules, adapter,
+metrics, tests, and model runner are released at
+<https://github.com/leemgs/stars-audiology>.
 
-**Why it fits JAMIA.** The work sits squarely in clinical informatics and the safe deployment of AI: it is a concrete, guideline-traceable instance of wrapping a probabilistic component in a deterministic guardrail for a time-critical decision, reported with an open benchmark and honest end-to-end numbers rather than an asserted target. The honest off-the-shelf expectation (~78%) is precisely why **mandatory clinician verification is load-bearing** — a message of direct interest to informatics readers building LLM-assisted clinical tooling.
+I have deliberately bounded the claims. The 71 cases are author-curated or
+synthetic, not patient records; there was no independent clinical adjudication;
+only one medical-LLM checkpoint and 18 urgent text cases were evaluated; and the
+tuned rule extractor is not an external comparator. Accordingly, the paper makes
+no clinical-effectiveness, transportability, fairness, or model-superiority
+claim. Its proposed next step is a locked pilot on consecutively sampled,
+deidentified notes with two clinical annotators and adjudication.
 
-**Contributions.**
-1. A deterministic red-flag safety layer (seven rules from the SSNHL and tinnitus clinical practice guidelines) that overrides model output and cannot be suppressed by a low predicted risk.
-2. An open 71-case benchmark and a two-level evaluation that separates *rule coverage* from *end-to-end* performance, isolating where risk actually arises.
-3. A real open-medical-LLM (MedGemma) result, scored through the same harness/adapter as the rule-based references, that resolves the self-authored-benchmark circularity concern with an extractor-independent number.
-4. A fully reproducible open release — rules, benchmark, schema-to-feature adapter, metrics, the MedGemma runner, and a free-GPU notebook — that reproduces the MedGemma row.
+This computational study used no human-subjects data. I am the sole author, have
+approved the manuscript, and accept responsibility for its content. I declare no
+competing interests and no external funding. Generative AI tools assisted with
+drafting and code scaffolding; I reviewed all content, and generated text was not
+treated as clinical evidence or independent annotation. The manuscript is
+original and is not under consideration elsewhere. Please verify these statements
+and the journal's current administrative requirements before using this draft in
+the submission portal.
 
-**Rigor and reporting.** The evaluation is TRIPOD+AI-aligned (a completed checklist is provided in `checklists/`), decoding is deterministic (greedy), and the full extraction-to-metrics path is exercised by unit tests with a deterministic no-model stand-in. All code, rules, benchmark, and metrics are openly available at <https://github.com/leemgs/stars-audiology>.
-
-**Relationship to a companion paper.** SAFE-EAR is the executed, results-bearing version of the prospective safety component specified in a companion epidemiologic study (STARS; perceived stress tracks the tinnitus symptom more than the audiometric threshold), submitted separately to an audiology venue. The two papers are complementary — STARS is *why the problem matters*, SAFE-EAR is *how to make the AI-assisted pipeline safe* — and neither claims the other's results. This manuscript is self-contained and does not depend on STARS's acceptance.
-
-**Responsible-AI statement.** Any prediction model here is a research tool with a declared intended use — never a screening, diagnostic, or triage device — and the deterministic layer is designed so that a model can only *escalate*, never suppress, an urgent referral. Generative AI tools assisted in drafting; the author reviewed and takes full responsibility for all content.
-
-**Declarations.** This manuscript is original, is not under consideration elsewhere, and has not been published previously. Every benchmark case is expert-authored or synthetic; **no patient data** are used, so the work does not constitute human-subjects research. The author has approved the submission and agrees to be accountable for the work. The author declares no competing interests. No external funding supported this work.
-
-I believe SAFE-EAR offers JAMIA readers a transparent, reproducible template for making LLM-assisted clinical pipelines safe against rare, time-critical failures, and I thank you for considering it.
+Thank you for considering the manuscript.
 
 Sincerely,
 
-**Geunsik Lim** (sole and corresponding author) — Sungkyunkwan University, Republic of Korea — leemgs@g.skku.edu — ORCID [0000-0003-1845-7132](https://orcid.org/0000-0003-1845-7132)
+**Geunsik Lim**  
+Sungkyunkwan University, Republic of Korea  
+leemgs@g.skku.edu  
+ORCID: [0000-0003-1845-7132](https://orcid.org/0000-0003-1845-7132)
