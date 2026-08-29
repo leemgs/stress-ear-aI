@@ -61,6 +61,20 @@ python src/run_llm_eval.py --extractor rule_v1,rule_v2,medgemma \
     --latex ../paper02/tables/table_llm_compare.tex
 ```
 
+The runner also supports two ungated compact-model controls through the same
+prompt, parser, adapter, and metrics:
+
+```bash
+python src/run_llm_eval.py --extractor qwen,smollm \
+    --out ../paper02/outputs/compact_llm_eval.json \
+    --latex ../paper02/tables/table_compact_llm.tex
+```
+
+The registered checkpoints are `Qwen/Qwen2.5-0.5B-Instruct` and
+`HuggingFaceTB/SmolLM2-360M-Instruct`. They are executable extensions, not
+manuscript results unless the weights are actually run; this avoids filling a
+comparison table with inferred or invented values.
+
 No local GPU? Open the turnkey **free-GPU notebook**
 [`code/notebooks/medgemma_eval_colab.ipynb`](../code/notebooks/medgemma_eval_colab.ipynb)
 (Colab/Kaggle free-tier T4 is enough for the 4B model).
@@ -78,5 +92,6 @@ cd paper02 && bash build.sh      # tectonic or pdflatex; writes main.pdf
 | File | What |
 |------|------|
 | `main.tex` | Self-contained manuscript (inline bibliography) |
+| `CONTRIBUTION_AUDIT.md` | Evidence/claim boundary and prioritized next validation study |
 | `tables/`  | Auto-generated result tables (`\input` by `main.tex`) |
 | `outputs/` | Result JSONs produced by the evaluation scripts |

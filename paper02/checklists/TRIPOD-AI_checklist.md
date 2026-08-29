@@ -5,7 +5,7 @@ following the TRIPOD+AI statement (Collins et al., 2024). This checklist covers
 the **realized** content of the SAFE-EAR paper (`../main.tex`): a deterministic,
 guideline-derived red-flag safety layer over schema-constrained clinical-text
 extraction, evaluated on an open 71-case benchmark with two reproducible
-rule-based extractors.
+rule-based extractors and an executed MedGemma-4B comparison.
 
 > **Scope note.** The two research *risk-stratification prediction models*
 > (tinnitus presence; audiometric hearing loss, with AUROC/AUPRC/calibration)
@@ -55,7 +55,7 @@ rule-based extractors.
 | **AI-3** | Transportability / external validation across settings | ◑ **[Prospective]** | Real-note and multilingual robustness remain to be tested; `../main.tex` §"Limitations" |
 | **AI-4** | Human oversight / role in clinical pathway | ✅ | Non-overridable deterministic red-flag layer + clinician-verified extraction; `../main.tex` §"System architecture", §"Governance", §"Discussion" |
 | **AI-5** | Reproducibility (seeds, versions, determinism) | ✅ | Run-to-run consistency 1.00; deterministic rules/extractors; open harness; `../main.tex` §"Results", §"Declarations" |
-| **AI-6** | Open medical LLM use constrained + verified | ✅ **[Prospective for the LLM step]** | Schema-constrained extraction; MedGemma evaluation is prospective via the same fixed harness/adapter; `../main.tex` §"System architecture", §"Reproducible extraction baseline" |
+| **AI-6** | Open medical LLM use constrained + verified | ✅ | Executed MedGemma-4B evaluation with zero-shot schema prompting, deterministic decoding, a shared adapter, and clinician verification; `../main.tex` §"System architecture", §"Three-system extractor comparison" |
 | — | Risk-stratification prediction models (tinnitus / hearing loss; AUROC/AUPRC, calibration, decision-curve) | **[Prospective]** | Not reported in either paper; prospective component of the STARS program |
 
 **Legend:** ✅ addressed / prespecified · ◑ partial · n/a not applicable (deterministic, no fitted parameters) · **[Prespecified]** frozen before evaluation · **[Prospective]** planned, not reported here.
