@@ -12,6 +12,33 @@ a genuinely strong paper here; most items are about *bounding the claim* and
 
 ---
 
+## ⚠️ Post-revision resolution status (read this first)
+
+> **This document is the *pre-revision* adversarial review and is retained as a
+> record.** The manuscript has since been revised substantially and the
+> two-paper split has been executed: the AI-extraction, MedGemma, and
+> deterministic red-flag safety-layer content — and the artifacts this review
+> refers to (`sections/ai_system.tex`, `tables/table_ai.tex`,
+> `table_metrics.tex`, `table_redflag.tex`, `table_intended_use.tex`) — were
+> **moved out of Paper A into the companion SAFE-EAR paper (`../paper02/`)**.
+> Paper A is now a purely observational (STROBE) survey study. Where a concern
+> below is phrased for the old combined manuscript, use this table for its
+> current state.
+
+| # | Concern | Current status in the revised manuscript |
+|---|---------|------------------------------------------|
+| **M1** | Reverse causation | **Addressed.** `discussion.tex` treats reverse causation as the chief threat (not a limitations-list afterthought), reports the prespecified non-bothersome-tinnitus sensitivity result (OR 1.24, *q*<0.02) and the monotone gradient, and the abstract states reverse causation remains plausible. |
+| **M2** | Extended / hearing-loss-adjusted / worse-ear models "only in the repository" | **Addressed.** The extended (depressed-mood–adjusted) and hearing-loss-adjusted tinnitus models and the worse-ear threshold result are now in `results.tex` with `Table~\ref{tab:results_knhanes_extended}`. |
+| **M3** | Single-item exposure/outcome measurement validity | **Addressed.** Elevated to first-class in Discussion and abstract (single-item stress and tinnitus; non-differential misclassification → attenuation; OR not a lower bound). |
+| **M4** | Scope / "four papers" / AI component prospective | **Resolved by the two-paper split.** The AI/safety component is now the executed, results-bearing companion `../paper02/` (SAFE-EAR); Paper A leads with the empirical symptom-vs-threshold finding. |
+| **M5** | Novelty vs. prior KNHANES tinnitus–stress work | **Addressed** in `related_work.tex` (names the closest prior KNHANES work and states what STARS adds). |
+| **M6** | Survey-variance details (domain estimation, single-PSU, MICE vs complete-case) | **Addressed** in `methods.tex`: subpopulation/domain estimation retaining the full design, standard lonely-PSU centering, independent R `survey` reproduction (`code/src/reproduce_survey.R`), and complete-case as primary with MICE demoted to a prespecified robustness check. |
+| **Mo1–Mo5, m1–m7** | Moderate/minor items | Largely folded into the revision (worse-ear/high-frequency and conductive-exclusion sensitivity now in the paper; abstract ≈250 words; framing made consistently a results paper; effect-size language softened; STROBE checklist submitted). Re-verify against the current text before submission. |
+
+The remainder of this file is the original review, kept verbatim for provenance.
+
+---
+
 ## What is already strong (keep and foreground)
 
 - A **prespecified, falsifiable hypothesis (H1)** with a real, coherent result:

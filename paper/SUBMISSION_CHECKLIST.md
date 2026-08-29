@@ -58,8 +58,8 @@ below.
 
 | Item | Status | Notes |
 |------|--------|-------|
-| All tables cited in text, in order | ✅ | 6 tables; `tab:ai` cross-reference **added** in this revision (was previously uncited). |
-| All figures cited in text | ✅ | `fig:dag` cited; `fig:framework` cross-reference **added** in this revision (was previously uncited). |
+| All tables cited in text, in order | ✅ | 6 tables — `tab:datasets`, `tab:variables`, `tab:harmonization`, `tab:results` (NHANES), `tab:results_knhanes` (KNHANES primary), `tab:results_knhanes_extended` (extended/sensitivity) — all cited in text. The former AI-components table (`tab:ai`) moved to the SAFE-EAR companion (`../paper02/`) with the two-paper split and is no longer part of Paper A. |
+| All figures cited in text | ✅ | 2 figures — `fig:framework` (conceptual framework) and `fig:dag` (causal DAG) — both cited in text. |
 | Table titles / figure captions self-contained | ✅ | Captions define abbreviations and the "synthetic ≠ result" caveat. |
 | Figures legible / vector | ✅ | Both figures are TikZ (vector, scale cleanly). ⚠️ verify AJA's figure file-format/resolution rules if they require separate uploaded figure files rather than inline. |
 
