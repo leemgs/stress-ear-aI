@@ -16,7 +16,7 @@ abstract, ICMJE/Vancouver numbered references).
 
 ## What is real here (and what is prospective)
 
-- **Real results — deterministic layer:** a guideline-derived red-flag safety
+- **Real results — deterministic layer:** a guideline-informed red-flag safety
   layer on a 71-case open benchmark (rule coverage **100%** recall / 0%
   over-referral). End-to-end safety is dominated by *extraction*, and the
   benchmark *discriminates* it.
@@ -26,16 +26,15 @@ abstract, ICMJE/Vancouver numbered references).
   spans **naive 56% → MedGemma-4b-it 78%** (14/18; specificity **100%**) **→ tuned
   100%** on identical cases; MedGemma macro-F1 **0.75**, urgency-changing error
   **10.8%**, run-consistency **1.00**. Because MedGemma never authored the
-  benchmark nor saw its cue lists, **its 78% is an extractor-independent
-  measurement** — the benchmark is neither saturated (a capable open medical LLM
-  still misses 4/18) nor gamed (the tuned 100% reflects benchmark-specific
-  tuning) — which resolves the circularity concern of a self-authored benchmark.
-  The honest off-the-shelf expectation (~78%) is why clinician verification is
-  load-bearing.
+  benchmark nor saw its cue lists, **its 78% is independent of the two
+  rule-extractor implementations**. This reduces implementation circularity but
+  is not external validation: cases, labels, schema, and adapter remain
+  author-defined. The 4/18 misses motivate, but do not validate, clinician
+  verification in a future workflow study.
 - **Still prospective:** evaluation on **real** clinical free text (rather than the
   open benchmark) needs IRB-approved, deidentified data; larger MedGemma variants
   and few-shot prompting remain to be tested.
-- **No patient data:** every benchmark case is expert-authored or synthetic.
+- **No patient data:** every benchmark case is author-curated or synthetic.
 
 ## Reproduce the results
 
@@ -93,5 +92,6 @@ cd paper02 && bash build.sh      # tectonic or pdflatex; writes main.pdf
 |------|------|
 | `main.tex` | Self-contained manuscript (inline bibliography) |
 | `CONTRIBUTION_AUDIT.md` | Evidence/claim boundary and prioritized next validation study |
+| `SUBMISSION_CHECKLIST.md` | Final portal checks and scientific risks that still require new data |
 | `tables/`  | Auto-generated result tables (`\input` by `main.tex`) |
 | `outputs/` | Result JSONs produced by the evaluation scripts |

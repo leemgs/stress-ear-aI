@@ -3,7 +3,7 @@
 Reporting checklist for the AI/extraction + deterministic-safety component,
 following the TRIPOD+AI statement (Collins et al., 2024). This checklist covers
 the **realized** content of the SAFE-EAR paper (`../main.tex`): a deterministic,
-guideline-derived red-flag safety layer over schema-constrained clinical-text
+guideline-informed red-flag safety layer over schema-constrained clinical-text
 extraction, evaluated on an open 71-case benchmark with two reproducible
 rule-based extractors and an executed MedGemma-4B comparison.
 
@@ -13,14 +13,15 @@ rule-based extractors and an executed MedGemma-4B comparison.
 > reported in either the empirical STARS paper (`../../paper/`, STROBE) or this
 > benchmark paper; the corresponding rows below are marked **[Prospective]**.
 > The **realized** subject here is the deterministic red-flag layer + rule-based
-> extraction benchmark, whose evaluation plan is prespecified and whose metrics
+> extraction benchmark, whose evaluation plan is explicit and whose metrics
 > are computed on an open, no-patient-data benchmark.
 
 > **Governance.** The extractor is a *research* tool with a declared intended
 > use — never a screening, diagnostic, or triage device. A deterministic
 > red-flag layer overrides any probabilistic output and cannot be suppressed by a
-> low predicted risk, and extracted red-flag features are clinician-verified
-> before use (`../main.tex` §"System architecture", §"Governance").
+> low predicted risk. Clinician verification and workflow monitoring are future
+> governance requirements, not evaluated components (`../main.tex`
+> §"System architecture", §"Intended use and governance requirements").
 
 | # | TRIPOD+AI item | Status | Where (SAFE-EAR / paper02) |
 |---|----------------|--------|---------------|
@@ -28,10 +29,10 @@ rule-based extractors and an executed MedGemma-4B comparison.
 | 2 | Structured abstract | ✅ | `../main.tex` (Objective / Materials and Methods / Results / Discussion / Conclusion) |
 | 3a | Background/rationale, clinical context | ✅ | `../main.tex` §"Background and Significance" |
 | 3b | Study objectives | ✅ | `../main.tex` §"Background and Significance" (Contributions); abstract Objective |
-| 4 | Data sources, setting | ✅ | Open benchmark, expert-authored/synthetic, **no patient data**; `../main.tex` §"Open benchmark" |
-| 5 | Eligibility / case construction | ✅ | 71 cases (34 structured, 37 free-text) across four note categories; `../main.tex` §"Open benchmark" |
-| 6 | Outcome to be predicted, definition | ✅ | Guideline-defined red-flag urgency (SSNHL/tinnitus CPGs); gold assigned a priori, independent of rule code; `../main.tex` §"Guideline-derived red-flag rules" |
-| 7 | Predictors (extracted features), definition, timing | ✅ | Typed fields + boolean red-flag features from schema-constrained extraction; `../main.tex` §"Reproducible extraction baseline"; `../tables/table_extraction.tex` |
+| 4 | Data sources, setting | ✅ | Open, author-curated/synthetic benchmark, **no patient data and no independent clinical adjudication**; `../main.tex` §"Open benchmark construction" |
+| 5 | Eligibility / case construction | ✅ | 71 author-curated cases (34 structured, 37 free-text) across four challenge categories; `../main.tex` §"Open benchmark construction" |
+| 6 | Outcome to be predicted, definition | ◑ | Author-assigned benchmark urgency operationalized from guideline-informed concepts; labels and rule design share authorship and lack clinical adjudication; `../main.tex` §"Guideline-informed operational rules", §"Threats to validity" |
+| 7 | Predictors (extracted features), definition, timing | ✅ | Typed fields + boolean red-flag features from schema-constrained extraction; `../main.tex` §"Three-system extractor comparison"; `../tables/table_extraction.tex` |
 | 8 | Sample size rationale | ◑ | Curated 71-case benchmark; Wilson 95% CIs reported; harness supports arbitrary N; `../main.tex` §"Limitations" |
 | 9 | Missing data handling | ✅ | Complete synthetic cases; extractor handles absent/implicit cues (colloquial/ambiguous categories); `../main.tex` §"Reproducible extraction baseline" |
 | 10 | Preprocessing; leakage prevention | ✅ | Deterministic rule-based extraction; gold urgency assigned **independently** of the rule code; `../main.tex` §"Two-level evaluation" |
@@ -50,15 +51,15 @@ rule-based extractors and an executed MedGemma-4B comparison.
 | 23 | Clinical use / implications / intended use | ✅ | Research tool only; deterministic override + mandatory clinician verification; `../main.tex` §"Governance", §"Discussion" |
 | 24 | Supplementary info / registration / data & code availability | ✅ | `../main.tex` §"Declarations"; open benchmark, rules, extractors, and metrics released |
 | 25 | Funding / conflicts | ✅ | `../main.tex` §"Declarations" |
-| **AI-1** | Explainability / interpretability methods and caveats | ✅ | Deterministic, fully auditable rules (inherently interpretable); `../main.tex` §"Governance" |
-| **AI-2** | Fairness across subgroups (first-class results) | ✅ | Per-category red-flag recall reported as a primary result; `../tables/table_redflag_bycat.tex` |
+| **AI-1** | Explainability / interpretability methods and caveats | ✅ | Deterministic, auditable operational rules with explicit clinical-appropriateness caveat; `../main.tex` §"Guideline-informed operational rules" |
+| **AI-2** | Fairness across subgroups | ◑ **[Prospective]** | No patient demographics or fairness evaluation; note categories are linguistic challenge strata, not protected or clinical subgroups; `../main.tex` §"Two-level evaluation", §"Limitations" |
 | **AI-3** | Transportability / external validation across settings | ◑ **[Prospective]** | Real-note and multilingual robustness remain to be tested; `../main.tex` §"Limitations" |
-| **AI-4** | Human oversight / role in clinical pathway | ✅ | Non-overridable deterministic red-flag layer + clinician-verified extraction; `../main.tex` §"System architecture", §"Governance", §"Discussion" |
+| **AI-4** | Human oversight / role in clinical pathway | ◑ **[Prospective]** | Clinician verification, parse-failure escalation, and monitoring are specified requirements but were not evaluated; `../main.tex` §"Intended use and governance requirements", §"Threats to validity" |
 | **AI-5** | Reproducibility (seeds, versions, determinism) | ✅ | Run-to-run consistency 1.00; deterministic rules/extractors; open harness; `../main.tex` §"Results", §"Declarations" |
-| **AI-6** | Open medical LLM use constrained + verified | ✅ | Executed MedGemma-4B evaluation with zero-shot schema prompting, deterministic decoding, a shared adapter, and clinician verification; `../main.tex` §"System architecture", §"Three-system extractor comparison" |
+| **AI-6** | Open medical LLM use constrained + verified | ✅ | Executed MedGemma-4B benchmark evaluation with zero-shot schema prompting, deterministic decoding, and a shared adapter; no clinical workflow validation; `../main.tex` §"System architecture", §"Three-system extractor comparison" |
 | — | Risk-stratification prediction models (tinnitus / hearing loss; AUROC/AUPRC, calibration, decision-curve) | **[Prospective]** | Not reported in either paper; prospective component of the STARS program |
 
-**Legend:** ✅ addressed / prespecified · ◑ partial · n/a not applicable (deterministic, no fitted parameters) · **[Prespecified]** frozen before evaluation · **[Prospective]** planned, not reported here.
+**Legend:** ✅ addressed · ◑ partial · n/a not applicable (deterministic, no fitted parameters) · **[Prospective]** planned, not reported here.
 
 Reference: Collins, G. S., Moons, K. G. M., Dhiman, P., Riley, R. D., Beam, A. L.,
 Van Calster, B., … Logullo, P. (2024). TRIPOD+AI statement: Updated guidance for

@@ -3,13 +3,14 @@
 This is the evaluation corpus for the *companion* (paper B) study: a
 deterministic, guideline-derived red-flag layer that gates an open medical-LLM
 extraction front-end for time-critical otologic symptoms (SSNHL / neurologic
-warning signs). It contains NO patient data: every case is expert-authored or
-synthetic, so the benchmark can be released and re-run openly.
+warning signs). It contains NO patient data: every case is author-curated or
+synthetic, so the benchmark can be released and re-run openly. It has not been
+independently clinically adjudicated.
 
 Two evaluation levels are supported (see run_redflag_eval.py):
 
-1. STRUCTURED level -- gold urgency (defined a priori by the SSNHL/tinnitus
-   guidelines, *independently* of the rule code) vs. the deterministic layer
+1. STRUCTURED level -- benchmark urgency (encoded from the intended rule semantics before
+   extractor application; labels and rule design share authorship) vs. the deterministic layer
    applied to correctly-extracted features. This measures **rule coverage**:
    does the rule set flag every guideline red flag and avoid over-flagging
    benign presentations?

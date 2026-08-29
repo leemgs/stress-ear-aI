@@ -111,10 +111,10 @@
           "fp": 0,
           "tn": 7,
           "fn": 0,
-          "sensitivity": NaN,
+          "sensitivity": null,
           "sensitivity_ci": [
-            NaN,
-            NaN
+            null,
+            null
           ],
           "specificity": 1.0,
           "specificity_ci": [
@@ -218,10 +218,10 @@
           "fp": 0,
           "tn": 7,
           "fn": 0,
-          "sensitivity": NaN,
+          "sensitivity": null,
           "sensitivity_ci": [
-            NaN,
-            NaN
+            null,
+            null
           ],
           "specificity": 1.0,
           "specificity_ci": [

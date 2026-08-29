@@ -99,7 +99,7 @@
             "specificity": 1.0
           },
           "negation": {
-            "sensitivity": NaN,
+            "sensitivity": null,
             "specificity": 1.0
           },
           "typical": {
@@ -206,7 +206,7 @@
             "specificity": 1.0
           },
           "negation": {
-            "sensitivity": NaN,
+            "sensitivity": null,
             "specificity": 1.0
           },
           "typical": {
@@ -313,7 +313,7 @@
             "specificity": 1.0
           },
           "negation": {
-            "sensitivity": NaN,
+            "sensitivity": null,
             "specificity": 1.0
           },
           "typical": {
